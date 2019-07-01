@@ -1,0 +1,77 @@
+Usage: ./fast_scggm [options] Y_output_samples Y_output_dims X_input_samples X_input_dims Y_file X_file Lambda_file Theta_file stats_file
+    sparse Lambda and Theta format (1-based array indices):
+num_rows num_columns num_nonzeros
+row_1 column_1 value_1
+...
+row_{num_nonzeros} column_{num_nonzeros} value_{num_nonzeros}
+    options:
+-y lambda_y(0.5): set the regularization parameter lambda_y
+-x lambda_x(0.5): set the regularization parameter lambda_x
+-v verbose(1): show information or not (0 or 1)
+-i max_outer_iters(10): max number of outer iterations
+-q tol(1e-2): tolerance for terminating outer loop
+-s sigma(1e-4): backtracking termination criterion
+-L Lambda0_filename: filename with initial Lambda0
+-T Theta0_filename: filename with initial Theta0
+-r refit(0): update (Lambda0,Theta0) without adding edges (0 or 1)
+
+Data should be represented as matrices Y (output variable data, 
+eg gene expression levels) and and X (input variable data, eg genotypes) 
+and stored in text files. The software reads the data stored in Y_file and X_file,
+the filenames for Y and X, respectively.
+Each line should contain the data for one individual,
+with values separated by whitespace (ie tabs or spaces). 
+The sizes of matrices Y and X also must be specified, as Y_output_samples 
+and Y_output_dims, and X_input_samples and X_input_dims, respectively.
+
+Upon completion, Fast-sCGGM writes three outputs: Lambda 
+(estimated network parameters over output variables), Theta (estimated input-output 
+perturbation parameters), and a file containing statistics, such as the value of 
+the objective function over the algorithm iterations. 
+The paths and filenames of these outputs must be specified by the user,
+as Lambda_file, Theta_file, and stats_file.
+
+The estimated model parameters are given in sparse matrix format.
+These are stored in text files, with three columns (separated by spaces) 
+and nnz lines, where nnz is the number of non-zeros in each matrix.
+The first line of Lambda_file and Theta_file contain three numbers 
+about the estimated parameter matrices:  
+num_rows num_columns num_nonzeros
+This is followed by num_nonzeros lines, each of which describes a single 
+non-zero element in the sparse matrix with its row index, column index, 
+and value. Row and column indices are given in base-1, thus taking values 
+within the range from 1 to num_rows or num_columns, respectively.
+
+The regularization parameters are optional inputs to the command-line software,
+lambda_y for Lambda, the output network parameters, and lambda_x for Theta,
+the input-output perturbation parameters. We recommend that users try 
+running our software with multiple different settings of these parameters. 
+
+Several algorithm control parameters can be used to manually adjust the runtime 
+and precision of the method. 
+- max_outer_iters limits the number of iterations
+  of the algorithm, where each iteration updates both Lambda and Theta.
+- tol is the termination criterion, allowing the program to 
+  finish before reaching max_outer_iters if the criterion is satisfied. The 
+  algorithm terminates when the minimum-norm subgradient becomes less than 
+  tol times the L1-norm of the parameters. This roughly corresponds to the 
+  number of significant digits of precision (eg tol=1e-2 terminates at 
+  2 significant digits of accuracy).
+- sigma is the backtracking line-search parameter for Lambda, 
+  and must be greater than 0 and less than 0.5. Larger values require more 
+  backtracking steps, but produce larger decreases in the objective function. 
+  However, we recommend keeping sigma very close to 0, due to the time cost 
+  of line-search.
+
+Fast-sCGGM by default initializes Lambda to a diagonal matrix and 
+Theta to all-zeros. But a user may instead specify different initializations 
+by writing the initial parameters to files and passing in the path/filenames 
+as Lambda0_file and Theta0_file, respectively. The formats of these files 
+is the same as described above for Lambda_file and Theta_file.
+
+If the user provides Lambda0_file and Theta0_file, the refit option may 
+be set to 1. This re-estimates Lambda and Theta without any regularization,
+while preventing the addition of further edges. We recommend users only use
+this on problems where the number of samples is comparable to the number of 
+output dimensions and input dimension, or where the provided Lambda0 and 
+Theta0 are extremely sparse. Otherwise, overfitting will likely occur.
