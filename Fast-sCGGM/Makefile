@@ -12,5 +12,5 @@ fast_scggm.o: fast_scggm.h fast_scggm.cc
 	${CXX} -c ${CXXFLAGS} ${INCLUDEFLAGS} ${LIBFLAGS} fast_scggm.cc -o fast_scggm.o
 
 clean:
-	rm -rf *.o fast_scggm *.mexa64 *.mexmaci64
+	rm -rf *.pyc *.o fast_scggm *.mexa64 *.mexmaci64
 

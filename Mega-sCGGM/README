@@ -1,0 +1,115 @@
+Usage: ./mega_scggm [options] Y_output_samples Y_output_dims X_input_samples X_input_dims Y_file X_file Lambda_file Theta_file stats_file
+    sparse Lambda and Theta format (1-based array indices):
+num_rows num_columns num_nonzeros
+row_1 column_1 value_1
+...
+row_{num_nonzeros} column_{num_nonzeros} value_{num_nonzeros}
+    options:
+-y lambda_y(0.5): set regularization parameter lambda_Lambda
+-x lambda_x(0.5): set regularization parameter lambda_Theta
+-v verbose(1): show information or not (0 or 1)
+-i max_outer_iters(10): max number of outer iterations
+-s sigma(1e-4): backtracking termination criterion
+-q tol(1e-2): tolerance for terminating outer loop
+-o obj_tol(1e-13): CG tolerance for calculating objective function
+-g grad_tol(1e-10): CG tolerance for calculating gradient
+-h hess_tol(1e-8): CG tolerance for calculating hessian
+-l num_blocks_Lambda(-1): number of blocks for Lambda CD
+-t num_blocks_Theta(-1): number of blocks for Theta CD
+-m memory_usage(32000): memory capacity in MB
+-n threads(4) : set the max number of threads
+-L Lambda0_filename(none): filename with initial Lambda
+-T Theta0_filename(none): filename with initial Theta
+-r refit(false): update (Lambda0,Theta0) without adding edges
+
+Data should be represented as matrices Y (output variable data, 
+eg gene expression levels) and and X (input variable data, eg genotypes) 
+and stored in text files. The software reads the data stored in Y_file and X_file,
+the filenames for Y and X, respectively.
+Each line should contain the data for one individual,
+with values separated by whitespace (ie tabs or spaces). 
+The sizes of matrices Y and X also must be specified, as Y_output_samples 
+and Y_output_dims, and X_input_samples and X_input_dims, respectively.
+
+Upon completion, Mega-sCGGM writes three outputs: Lambda 
+(estimated network parameters over output variables), Theta (estimated input-output 
+perturbation parameters), and a file containing statistics, such as the value of 
+the objective function over the algorithm iterations. 
+The paths and filenames of these outputs must be specified by the user,
+as Lambda_file, Theta_file, and stats_file.
+
+The estimated model parameters are given in sparse matrix format.
+These are stored in text files, with three columns (separated by spaces) 
+and nnz lines, where nnz is the number of non-zeros in each matrix.
+The first line of Lambda_file and Theta_file contain three numbers 
+about the estimated parameter matrices:  
+num_rows num_columns num_nonzeros
+This is followed by num_nonzeros lines, each of which describes a single 
+non-zero element in the sparse matrix with its row index, column index, 
+and value. Row and column indices are given in base-1, thus taking values 
+within the range from 1 to num_rows or num_columns, respectively.
+
+
+Regularization parameters:
+
+The regularization parameters are lambda_y for Lambda, the output network 
+parameters, and lambda_x for Theta, the input-output perturbation parameters. 
+We recommend that users try running our software with multiple different 
+settings of these parameters. 
+
+
+Runtime and numerical precision control settings: 
+
+- max_outer_iters limits the number of iterations
+  of the algorithm, where each iteration updates both Lambda and Theta.
+- tol is the termination criterion, allowing the program to 
+  finish before reaching max_outer_iters if the criterion is satisfied. The 
+  algorithm terminates when the minimum-norm subgradient becomes less than 
+  tol times the L1-norm of the parameters. This roughly corresponds to the 
+  number of significant digits of precision (eg tol=1e-2 terminates at 
+  2 significant digits of accuracy).
+- sigma is the backtracking line-search parameter for Lambda, 
+  and must be greater than 0 and less than 0.5. Larger values require more 
+  backtracking steps, but produce larger decreases in the objective function. 
+  However, we recommend keeping sigma very close to 0, due to the time cost 
+  of line-search.
+- obj_tol is the precision of conjugate gradient method for computing the 
+  objective. Only for advanced users.
+- grad_tol is the precision of conjugate gradient method for computing the 
+  gradients. Only for advanced users.
+- hess_tol is the precision of conjugate gradient method for computing the 
+  Hessian. Only for advanced users.
+
+
+Memory usage control settings:
+
+If num_blocks_Lambda and num_blocks_Theta are set to a negative number, 
+as happens by default, Mega-sCGGM chooses the largest possible block sizes 
+for Lambda and Theta, respectively, such that optimizing each block requires 
+no more than memory_usage (in MB). The value of memory_usage is by 
+default 32000, or 32GB.
+
+If num_blocks_Lambda and num_blocks_Theta are set to positive numbers, the 
+algorithm ignores memory_usage and uses these manual settigs instead.
+
+
+Parallelization control settings:
+
+num_threads is the maximum number of num_threads used by the algorithm.
+The actual number of threads used may be less, as limited by user's computer.
+
+
+Parameter initialization settings:
+
+Mega-sCGGM by default initializes Lambda to a diagonal matrix and 
+Theta to all-zeros. But a user may instead specify different initializations 
+by writing the initial parameters to files and passing in the path/filenames 
+as Lambda0_file and Theta0_file, respectively. The formats of these files 
+is the same as described above for Lambda_file and Theta_file.
+
+If the user provides Lambda0_file and Theta0_file, the refit option may 
+be set to 1. This re-estimates Lambda and Theta without any regularization,
+while preventing the addition of further edges. We recommend users only use
+this on problems where the number of samples is comparable to the number of 
+output dimensions and input dimension, or where the provided Lambda0 and 
+Theta0 are extremely sparse. Otherwise, overfitting will likely occur.
