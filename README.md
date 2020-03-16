@@ -12,7 +12,8 @@ Run the following command to install the software.
 ```
 
 ## Mac OSX
-You will first need to install [Homebrew](https://brew.sh/), and then use it to install llvm:
+
+Depending on the MacOS version and default compiler, the location of some of the library #include statements in Mega-sCGGM and also those in Eigen for Fast-sCGGM need to change. Just always using the llvm/clang compiler installed via homebrew puts the libraries in the same place. For this, you will first need to install [Homebrew](https://brew.sh/), and then use it to install llvm:
 
 ```bash
 brew install llvm
