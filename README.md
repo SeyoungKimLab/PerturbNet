@@ -3,6 +3,14 @@ Software for Learning Gene Networks Underlying Clinical Phenotypes Using SNP Per
 
 # Installation
 
+## Linux
+
+Run the following command to install the software.
+
+```bash
+./INSTALL.sh
+```
+
 ## Mac OSX
 You will first need to install [Homebrew](https://brew.sh/), and then use it to install llvm:
 
@@ -17,7 +25,7 @@ Then, run
 ./INSTALL.sh
 ```
 
-## Linux
+
 
 # Running
 
