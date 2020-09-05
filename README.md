@@ -1,4 +1,4 @@
-# Perturb-Net
+# PerturbNet
 Software for Learning Gene Networks Underlying Clinical Phenotypes Using SNP Perturbations
 
 # Installation
