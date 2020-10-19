@@ -7,8 +7,8 @@ import scipy.sparse as ssp
 import scipy.sparse.linalg as ssl
 import sys
 
-sys.path.append("../Fast-sCGGM/")
-from fast_scggm import fast_scggm
+sys.path.append("../Mega-sCGGM/")
+from mega_scggm import mega_scggm
 
 n = 100
 p = 200
@@ -33,7 +33,7 @@ Y = meanY + noiseY
 
 lambdaLambda = 0.5
 lambdaTheta = 1.0
-(estLambda, estTheta, estStats) = fast_scggm(Y, X, lambdaLambda, lambdaTheta)
+(estLambda, estTheta, estStats) = mega_scggm(Y, X, lambdaLambda, lambdaTheta)
 
 plt.figure()
 plt.spy(Theta)

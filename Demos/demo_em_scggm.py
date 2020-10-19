@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.sparse as ssp
 import scipy.sparse.linalg as ssl
-import sksparse.cholmod as skc
 import sys
 
 sys.path.append("../EM-sCGGM/")
@@ -35,16 +34,25 @@ Theta_xy = ssp.vstack([Theta_xy_top, Theta_xy_bottom])
 '''
 Theta_yz = ssp.random(q, r)
 Theta_xy = ssp.random(p, q)
+Sigma_y = ssl.inv(Lambda_y)
+Sigma_z = ssl.inv(Lambda_z)
 
 X = np.random.randn(n, p)
-meanY = -1*X*Theta_xy*ssl.inv(Lambda_y)
-Lambda_y_factor = skc.cholesky(Lambda_y)
-noiseY = (Lambda_y_factor.solve_Lt(np.random.randn(q,n))).transpose()
+
+try:
+    import sksparse.cholmod as skc
+    Lambda_y_factor = skc.cholesky(Lambda_y)
+    noiseY = (Lambda_y_factor.solve_Lt(np.random.randn(q,n))).transpose()
+    Lambda_z_factor = skc.cholesky(Lambda_z)
+    noiseZ = (Lambda_z_factor.solve_Lt(np.random.randn(r,n))).transpose()
+except:
+    noiseY = np.random.multivariate_normal(np.zeros(q), Sigma_y.todense(), size=n)
+    noiseZ = np.random.multivariate_normal(np.zeros(r), Sigma_z.todense(), size=n)
+
+meanY = -1 * X @ Theta_xy @ Sigma_y
 Y = meanY + noiseY
 Y_o = Y[0:n_o,:]
-meanZ = -1*Y*Theta_yz*ssl.inv(Lambda_z)
-Lambda_z_factor = skc.cholesky(Lambda_z)
-noiseZ = (Lambda_z_factor.solve_Lt(np.random.randn(r,n))).transpose()
+meanZ = -1 * Y @ Theta_yz @ Sigma_z
 Z = meanZ + noiseZ
 
 lambdaLambda_z = 0.5

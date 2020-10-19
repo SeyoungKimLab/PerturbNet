@@ -6,7 +6,7 @@ import scipy.sparse as ssp
 def txt_to_sparse(filename):
     with open(filename, "r") as tf: 
         tfr = csv.reader(tf, delimiter=" ")
-        first_row = tfr.next()
+        first_row = next(tfr)
         p = int(first_row[0])
         q = int(first_row[1])
         nnz = int(first_row[2])

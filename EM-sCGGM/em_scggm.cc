@@ -125,8 +125,8 @@ void em_scggm(
 		MatrixXd nZ_hThzy_X_hThxy = -1*(Z_h*Theta_zy + X_h*Theta_xy);
 	
 		MatrixXd Sig_y_giv_xz(q, q);
-		printf("E-step prep \n");
-		fflush(stdout);
+		//printf("E-step prep \n");
+		//fflush(stdout);
 		if (options.sparse_E_step) {
 			// Avoid dense inverse
 			//     Convert from Eigen format
@@ -151,8 +151,8 @@ void em_scggm(
 					V[qq][rr] = V_eigen(qq,rr);
 				}
 			}
-			printf("computed V \n");
-			fflush(stdout);
+			//printf("computed V \n");
+			//fflush(stdout);
 			//    Compute inverse via CG method
 			vector<double> Sig_y_giv_xz_i(q, 0);
 			for (long i = 0; i < q; i++) {
@@ -162,8 +162,8 @@ void em_scggm(
 					Sig_y_giv_xz(i,j) = Sig_y_giv_xz_i[j];
 				}
 			}
-			printf("computed Sig_y_giv_xz \n");
-			fflush(stdout);
+			//printf("computed Sig_y_giv_xz \n");
+			//fflush(stdout);
 		} else {
 			// Performs dense inverse
 			printf("beginning dense E-step \n");
@@ -182,21 +182,21 @@ void em_scggm(
 		MatrixXd eY_h = nZ_hThzy_X_hThxy*Sig_y_giv_xz;
 		eY.topRows(n_o) = Y_o;
 		eY.bottomRows(n_h) = eY_h;
-		printf("computed eY \n");
-		fflush(stdout);
+		//printf("computed eY \n");
+		//fflush(stdout);
 		double nd = static_cast<double>(n);
 		//MatrixXd eYTeY = (Y_oTY_o + eY_h.transpose()*eY_h) / nd;
 		MatrixXd eYTeY = (eY.transpose() * eY) / nd;
-		printf("computed eY'eY \n");
-		fflush(stdout);
+		//printf("computed eY'eY \n");
+		//fflush(stdout);
 		Syy = (static_cast<double>(n_h)/nd)*Sig_y_giv_xz + eYTeY;
-		printf("computed Syy \n");
-		fflush(stdout);
+		//printf("computed Syy \n");
+		//fflush(stdout);
 		Syy = Syy.selfadjointView<Eigen::Upper>();
-		printf("sym Syy \n");
-		fflush(stdout);
+		//printf("sym Syy \n");
+		//fflush(stdout);
 		Syz = (1.0/nd) * eY.transpose() * Z;
-		printf("computed Syz \n");
+		//printf("computed Syz \n");
 		fflush(stdout);
 
 		// Convert sufficient statistics to vector format

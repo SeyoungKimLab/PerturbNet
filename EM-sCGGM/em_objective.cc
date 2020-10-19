@@ -66,15 +66,15 @@ double EMObjective(
 	double ll_yz_tr = traceProduct(Lambda_zz_sym, Z_YB, Z_YB);
 	double ll_yz_logdet = -1*n_o*logdet(chol_zz.matrixL(), true);
 	double ll_yz = ll_yz_tr + ll_yz_logdet;
-	printf("  EMObjective computed ll_xy and ll_yz \n");
-	fflush(stdout);
+	// printf("  EMObjective computed ll_xy and ll_yz \n");
+	// fflush(stdout);
 
 	MatrixXd XhThT = (-1*X_h*Theta_xy).transpose();   // n_h x q
 	MatrixXd eY_h = chol_yy.solve(XhThT).transpose(); // n_h x q
 	MatrixXd YhThT = (-1*eY_h*Theta_yz).transpose();  // n_h x r
 	MatrixXd eZX_h = chol_zz.solve(YhThT).transpose(); // n_h x r
-	printf("  EMObjective computed z_h|x_h \n");
-	fflush(stdout);
+	// printf("  EMObjective computed z_h|x_h \n");
+	// fflush(stdout);
 
 	MatrixXd Z_Xmu_h = Z_h - eZX_h; // n_h x r
 	MatrixXd Ir = MatrixXd::Identity(r, r);
@@ -94,8 +94,8 @@ double EMObjective(
 	Sig_zx = (Ir + Sig_z*(
 		Theta_yz.transpose()*chol_yy.solve(Theta_yz)))*Sig_z;
 	Sig_zx = Sig_zx.selfadjointView<Eigen::Upper>();
-	printf("  EMObjective computed Sig_zx \n");
-	fflush(stdout);
+	// printf("  EMObjective computed Sig_zx \n");
+	// fflush(stdout);
 
 	double logdetSig_zx;
 	MatrixXd iSig_zx;
@@ -110,8 +110,8 @@ double EMObjective(
 	iSig_zx = Sig_zx_LLT.solve(Ir);
 	MatrixXd L = Sig_zx_LLT.matrixL();
 	logdetSig_zx = 2*L.diagonal().array().log().sum();
-	printf("  EMObjective computed iSig_zx and logdetSig_zx \n");
-	fflush(stdout);
+	// printf("  EMObjective computed iSig_zx and logdetSig_zx \n");
+	// fflush(stdout);
 
 	MatrixXd innerZ_Xmu_h = Z_Xmu_h.transpose()*Z_Xmu_h;
 	double ll_xz = traceProduct(iSig_zx, innerZ_Xmu_h) + n_h*logdetSig_zx;
