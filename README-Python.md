@@ -74,3 +74,70 @@ FUNCTIONS
 FILE
     Perturb-Net/EM-sCGGM/em_scggm.py
 ```
+
+## Mega-sCGGM
+
+```
+Help on module mega_scggm:
+
+NAME
+    mega_scggm
+
+FUNCTIONS
+    mega_scggm(Y, X, lambdaLambda, lambdaTheta, verbose=False, max_iters=50, sigma=0.0001, tol=0.01, num_blocks_Lambda=-1, num_blocks_Theta=-1, memory_usage=32000, threads=16, refit=False, Lambda0=None, Theta0=None)
+        Args:
+          Y: output data matrix (n samples x q dimensions target variables)
+          X: input data matrix (n samples x p dimensions covariate variables)
+          lambdaLambda: regularization for Lambda_y
+          lambdaTheta: regularization for Theta_xy
+        Optional args:
+          verbose: print information or not
+          max_iters: max number of outer iterations
+          sigma: backtracking termination criterion
+          tol: tolerance for terminating outer loop
+          num_blocks_Lambda: number of blocks for Lambda CD
+          num_blocks_Theta: number of blocks for Theta CD
+          memory_usage: memory capacity in MB
+          threads: the maximum number of threads
+          refit: refit (Lambda0, Theta0) without adding any edges
+          Lambda0: q x q scipy.sparse matrix to initialize Lambda
+          Theta0: p x q scipy.sparse matrix to initialize Theta
+        
+        Returns:
+            Lambda: q x q sparse matrix
+            Theta: p x q sparse matrix
+            stats_dict: dict of logging results
+
+FILE
+    PerturbNet/Mega-sCGGM/mega_scggm.py
+    
+```
+
+## Fast-sCGGM
+
+```
+Help on module fast_scggm:
+
+NAME
+    fast_scggm
+
+FUNCTIONS
+    fast_scggm(Y, X, lambdaLambda, lambdaTheta, verbose=False, max_iters=50, sigma=0.0001, tol=0.01, refit=False, Lambda0=None, Theta0=None)
+        Inputs:
+          Y (n samples x q dimensions target variables)
+          X (n samples x p dimensions covariate variables)
+          lambdaLambda (regularization for Lambda_y)
+          lambdaTheta (regularization for Theta_xy)
+        Optional inputs:
+          verbose: print information or not
+          max_iters: max number of outer iterations
+          sigma: backtracking termination criterion
+          tol: tolerance for terminating outer loop
+          refit: refit (Lambda0, Theta0) without adding any edges
+          Lambda0: q x q scipy.sparse matrix to initialize Lambda
+          Theta0: p x q scipy.sparse matrix to initialize Theta
+        Returns (Lambda, Theta, stats_dict)
+
+FILE
+    PerturbNet/Fast-sCGGM/fast_scggm.py
+```
