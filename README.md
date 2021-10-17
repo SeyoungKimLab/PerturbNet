@@ -1,5 +1,19 @@
 # PerturbNet
-Software for Learning Gene Networks Underlying Clinical Phenotypes Using SNP Perturbations
+This software implments the statistical methods for learning gene networks underlying clinical phenotypes using SNP perturbations, described in the following paper:
+
+McCarter, C., Howrylak, J., & Kim, S. (2020). Learning gene networks underlying clinical phenotypes using SNP perturbation. PLoS computational biology, 16(10), e1007940.
+
+The statistical model and optimization method were previously described in the following machine learning conference papers:
+
+McCarter, C., & Kim, S. (2016). Large-scale optimization algorithms for sparse conditional gaussian graphical models. In Proceedings of the Conference on Artificial Intelligence and Statistics (pp. 528-537). PMLR.
+
+McCarter, C., & Kim, S. (2014). On sparse Gaussian chain graph models. Advances in Neural Information Processing Systems, 27, 3212-3220.
+
+The optimization method, Fast-CGGM and Mega-CGGM, in this package improve upon the previous optimization method by two to three orders of magnitude for the same statistical model described in the following papers:
+
+Zhang, L., & Kim, S. (2014). Learning gene networks under SNP perturbations using eQTL datasets. PLoS computational biology, 10(2), e1003420.
+
+Sohn, K. A., & Kim, S. (2012). Joint estimation of structured sparsity and output structure in multiple-output regression via inverse-covariance regularization. In Artificial Intelligence and Statistics (pp. 1081-1089). PMLR.
 
 # Installation
 
