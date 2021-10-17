@@ -5,7 +5,7 @@ McCarter, C., Howrylak, J., & Kim, S. (2020). Learning gene networks underlying 
 
 The statistical model and optimization method were previously described in the following machine learning conference papers:
 
-McCarter, C., & Kim, S. (2016). Large-scale optimization algorithms for sparse conditional gaussian graphical models. In Proceedings of the Conference on Artificial Intelligence and Statistics (pp. 528-537). PMLR.
+McCarter, C., & Kim, S. (2016). Large-scale optimization algorithms for sparse conditional Gaussian graphical models. In Proceedings of the Conference on Artificial Intelligence and Statistics (pp. 528-537). PMLR.
 
 McCarter, C., & Kim, S. (2014). On sparse Gaussian chain graph models. Advances in Neural Information Processing Systems, 27, 3212-3220.
 
